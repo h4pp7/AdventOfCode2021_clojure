@@ -35,3 +35,51 @@ direction. Stop when you reached the end point.
 I couldn't figure out how to do this in a more non-declarative way, but got an
 idea from reddit: Just build an iterating function, that applies the direction.
 Then `iterate` it and `take-while` the end point hasn't been reached.
+
+### Day 6
+Part 2 is just going to be "now do the same, but for 800 days", isn't it.
+
+When would that be a problem?
+- list where the indices = days and the values how many new new fish will spawn that day
+- go through the list and for every new fish add 1 every 6 steps from there, plus 2 days for maturity
+
+With the test input "3,4,3,1,2" we want the following initial state: [0 1 1 2
+1]. No new fish will be born on the first day, one new fish each the next two
+days etc. In other words, for every number in the input, we put +1 into the
+list at index = number + 1.
+
+But we don't need an vector with 80 days. We only need a window of 8 days.
+
+Map over the range of 0 8 and put the frequency of that number at the
+respective index (with default to 0).
+
+```clojure
+(mapv #(get (frequencies [3 4 3 1 2]) % 0) (range 0 9))
+```
+
+Now we have this vector: `[0 1 1 2 1 0 0 0 0]`
+
+At every step, we take the first value of that vector and move it to the last
+position. That represents the new fish, that every fish at this step will
+produce in 8 days. We take that same value and add it 6 to the value 6 days
+later.
+
+So we need a way to rotate the vector.
+
+```clojure
+(concat (subvec v n) (subvec v 0 n))
+```
+
+This only works if n is not bigger than the vectors lenght. I could improve
+just letting it rotate as much as you want.
+
+And then:
+
+```clojure
+(defn step
+  [fish-list]
+  (let [new-fish (first fish-list)]
+    (update (rotate-left fish-list 1) 6 + new-fish)))
+```
+
+On my machine part 1 takes about 500 µs, part 2 700 µs.
