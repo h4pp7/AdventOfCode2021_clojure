@@ -83,3 +83,34 @@ And then:
 ```
 
 On my machine part 1 takes about 500 µs, part 2 700 µs.
+
+### Day 7
+#### Part 1
+Isn't this just getting the median of all the numbers, get the difference to that median for every number and sum that?
+Median of the example input is 2, so that checks out.
+Get the median, then reduce all the numbers with a functon that sums the (absolute) distance between every number and the median.
+
+#### Part 2
+Just a hunch: if we just do the same thing but with the mean instead of the median?
+
+With the test input `(/ (reduce + positions) (count positions)` gives 4.9 and
+with quot we get 4. Do we just need to round this? Let's try using
+`Math/round`.
+
+Ok, that gives us 5 as the target position for the example input.
+
+To calculate the cost: Get the difference between target and positions, make a
+range of that length, starting at 1 and sum that?
+
+I came up with a goofy way to get the triangular number: `(reduce + (range (inc distance)))`.
+But `(/ (* distance (inc distance)) 2)` is the math I didn't know, that does the same.
+
+For rounding the mean to an integer, there is no way to figure out which of the
+next two is the correct one, apart from minimizing the cost. I can't determine
+that before calculating the cost.
+
+That's why I my code either worked for the test input or for the real input
+(one needs to get rounded up, the other down to minimize the cost).
+
+Quick solution is to check the total cost for both points next to the mean and
+take the minimum of that. But maybe there's a smarter way to do that.
