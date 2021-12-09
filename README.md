@@ -114,3 +114,73 @@ That's why I my code either worked for the test input or for the real input
 
 Quick solution is to check the total cost for both points next to the mean and
 take the minimum of that. But maybe there's a smarter way to do that.
+
+### Day 8
+
+How do I determine, which letters in the input (signals) correspond to which segment?
+Let's take the example input:
+
+```
+acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab
+```
+
+Before we start each letter has 7 possibilites.
+But we can identify 1, 4, 7 and 8 by the length of the word. 
+The word with length 1 must be 1. That reduces the possibilites to only two for the two contained letters.
+In the example, a is either c or f and b is the other of these two options.
+
+So we can remove a and b from the word for 7, which we know because it is the only one with length 3.
+
+Now far we know:
+- a = c/f 
+- b = c/f
+- d = a
+
+---
+
+Actually, I don't need to identify the segments. I just need enough sub-shapes
+to differentiate the 10 numbers!
+
+- 1: length two
+- 4: length four
+- 7: length three
+- 8: length seven
+
+Three numbers with five segments, that can be excluded with these steps:
+
+- 5: only five-segment number, that contains the diff of 1 and 4
+- 3: contains the segments of 1
+- 2: the last five-segment number
+
+And three numbers with six segments:
+- 6: does not contain all of 1
+- 0: does not contain the diff of 1 and 4
+- 9: last number
+
+---
+
+The smart way that alot of others came up with is the following:
+This is the correct configuration:
+
+```
+0: abcefg 1: cf 2: acdeg 3: acdfg 4: bcdf 5: abdfg 6: abdefg 7: acf 8: abcdefg 9: abcdfg
+```
+
+The frequency for the segments over the whole configuration is:
+
+```clojure
+{\c 8, \f 9, \a 8, \b 6, \d 7, \e 4, \g 7}
+```
+Sadly, it's not unique. But: replace every character with it's frequency and (e.g "bcdf" is [6 8 7 f]) and take the sum.  
+Now we have a unique number for every word.
+
+```
+42 17 34 39 30 37 41 25 49 45
+```
+
+We can use these as keys mapping to the correct number.
+
+Then, for every line in the input:
+1. get the frequency of the segments in the signal patterns
+2. for ever output word, get the sum in the described way
+3. lookup the correct number with that sum as key
