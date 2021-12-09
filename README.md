@@ -184,3 +184,31 @@ Then, for every line in the input:
 1. get the frequency of the segments in the signal patterns
 2. for ever output word, get the sum in the described way
 3. lookup the correct number with that sum as key
+
+### Day 9
+#### Part 1
+I can reuse the technique of my solution for AoC 2020 day 7:
+Keep the input as one sequence and get vertical neighbours with an index offset. The offset is the index of the first newline character.
+But we need to pad the string in the beginning and at the end, otherwise we'll get out of bounds errors.
+This time we'll not leave it as a string though, but convert it to a number sequence of numbers (and newline characters). Padding with 9 so that the numbers at the edge are always smaller than it.
+
+Padding function from last year, adjusted:
+
+```clojure
+(defn padded
+  [input]
+  (let [width (first (keep-indexed #(when (not (number? %2)) %1) input))
+        padding (repeat (inc width) 9)]
+    (concat padding input padding)))
+```
+
+I could do the padding on the string like last year with
+`clojure.string/index-of`, but now I learned to find the index of an occurence
+in a sequence with `keep-indexed`.
+
+Now we just need function that finds all the von Neumann neighbours. I'll generalize to Manhattan neighours, maybe we need to consider numbers further away for part 2.
+
+Wait a minute: I don't need to pad! Since I'll use a vector, I can just use `get` with a default value of 9. D'oh.
+
+#### Part 2
+To find the basins, start at a lowest point and spread in every direction until you hit a 9 (or the edge).
