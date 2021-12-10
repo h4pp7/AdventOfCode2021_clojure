@@ -212,3 +212,14 @@ Wait a minute: I don't need to pad! Since I'll use a vector, I can just use `get
 
 #### Part 2
 To find the basins, start at a lowest point and spread in every direction until you hit a 9 (or the edge).
+
+First thing I can think of is doing it recursively:
+- Start with the lowest point
+- Get the indices of its neighbors, that are not 9
+- Then repeat that for every of those, but also ignore indices already visited.
+
+---
+
+Or implement one of the [flood fill algorithms](https://en.m.wikipedia.org/wiki/Flood_fill) from wikipedia.
+
+What data structure should I use? I guess this is clojure, so the answer is a map.
