@@ -223,3 +223,41 @@ First thing I can think of is doing it recursively:
 Or implement one of the [flood fill algorithms](https://en.m.wikipedia.org/wiki/Flood_fill) from wikipedia.
 
 What data structure should I use? I guess this is clojure, so the answer is a map.
+
+### Day 10
+#### Part 1
+Find corrupted lines.
+Find the first closing bracket in a line that doesn't have corresponding open bracket and score it.
+Ignore incomplete lines (where there's open brackets that are not closed (probably part 2)).
+
+The pairs are: `() [] {} <>`
+
+Strategy: go through the characters, if it's an opening bracket, put it on the stack, if it's a closing bracket pop things off the stack until you find a matching open bracket.
+If you can't find one, score it.
+
+Although, since the input is only brackets it should be enough to look at the top of the stack. It must be the matching open bracket.
+
+Implemented it with `loop`.
+Not sure this is the best way to check if it's a closing bracket:
+
+```clojure 
+(some #{c} '(\( \[ \{ \<))
+```
+
+I check if the top of the stack is the matching opening bracket with this:
+
+```clojure
+(= ({\) \( \] \[ \} \{ \> \<} c)
+   (peek stack))
+```
+
+#### Part 2
+Complete the incomplete lines with closing brackets in the right order.
+I think the complicated scoring is to ensure that you actually complete in the right order.
+
+This should work like this:
+- go through the line as before, popping things of the stack if they match
+- at the end, get the matching bracket for the top of the stack, pop it, repeat until it's empty
+
+For now, I'm just removing all the lines that have an illegal character, by running the function for part 1 again.
+I'm sure I could put both parts in one loop, so that I don't have to process the incomplete lines twice.

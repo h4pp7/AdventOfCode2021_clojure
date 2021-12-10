@@ -15,7 +15,7 @@
 
 (defn spread
   [[idx & indices] heightmap basin stride]
-  (if nil? idx
+  (if (nil? idx)
     basin
     (let [neighbors (manhattan-neighbors idx stride heightmap)])))
     
