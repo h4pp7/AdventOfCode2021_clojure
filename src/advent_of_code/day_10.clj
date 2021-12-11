@@ -1,31 +1,25 @@
 (ns advent-of-code.day-10
   "AOC 2021 Day 10")
 
-(defn first-illegal
+(defn check-syntax
   [line]
   (loop [[c & r] line
          stack []]
     (cond 
+      (nil? c)                          {:stack stack}
       (some #{c} '(\( \[ \{ \<))        (recur r (conj stack c))
       (= ({\) \( \] \[ \} \{ \> \<} c)
          (peek stack))                  (recur r (pop stack))
-      :else                             c)))
+      :else                             {:illegal c})))
 
 (defn auto-complete
-  [line]
-  (let [stack (loop [[c & r] line
-                     stack []]
-                (cond 
-                  (some #{c} '(\( \[ \{ \<))        (recur r (conj stack c))
-                  (= ({\) \( \] \[ \} \{ \> \<} c)
-                     (peek stack))                  (recur r (pop stack))
-                  :else                             stack))]
-    (loop [stack stack
-           closing []]
-      (if (empty? stack) 
-        closing
-        (recur (pop stack)
-               (conj closing ({\( \) \[ \] \{ \} \< \>} (peek stack))))))))
+  [stack]
+  (loop [stack stack
+         closing []]
+    (if (empty? stack) 
+      closing
+      (recur (pop stack)
+             (conj closing ({\( \) \[ \] \{ \} \< \>} (peek stack)))))))
 
 (defn score-closing
   [brackets]
@@ -40,7 +34,7 @@
   [input]
   (let [lines (clojure.string/split-lines input)]
     (reduce (fn [sum l]
-              (if-let [illegal (first-illegal l)]
+              (if-let [illegal (:illegal (check-syntax l))]
                 (+ sum ({\) 3 \] 57 \} 1197 \> 25137} illegal))
                 sum))
             0
@@ -51,7 +45,9 @@
   [input]
   (->> input
        clojure.string/split-lines
-       (remove #(first-illegal %))
+       (map check-syntax)
+       (map :stack)
+       (remove nil?)
        (map auto-complete)
        (map score-closing)
        sort

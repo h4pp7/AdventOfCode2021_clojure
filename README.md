@@ -259,5 +259,4 @@ This should work like this:
 - go through the line as before, popping things of the stack if they match
 - at the end, get the matching bracket for the top of the stack, pop it, repeat until it's empty
 
-For now, I'm just removing all the lines that have an illegal character, by running the function for part 1 again.
-I'm sure I could put both parts in one loop, so that I don't have to process the incomplete lines twice.
+To combine the work for part 1 and part 2, the main loop returns a map with the key `:illegal` and the illegal bracket. If it went through the whole line without finding an illegal character, it returns a map with the key `{:stack}` and the stack.
