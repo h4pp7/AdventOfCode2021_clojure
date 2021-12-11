@@ -222,7 +222,18 @@ First thing I can think of is doing it recursively:
 
 Or implement one of the [flood fill algorithms](https://en.m.wikipedia.org/wiki/Flood_fill) from wikipedia.
 
-What data structure should I use? I guess this is clojure, so the answer is a map.
+---
+
+The alternative to the heightmap as one vector is to have a vector of the rows and access the coordinates with `get-in`.
+
+```clojure
+(get-in [[0 1 2]
+         [3 4 5]
+         [6 7 8]] [1 2])
+```
+
+returns the 5 at the end of row two. It also can return not-found value, if the
+index does not exist. I think I like that more.
 
 ### Day 10
 #### Part 1

@@ -2,36 +2,29 @@
   "AOC 2021 Day 9")
 
 (defn manhattan-neighbors
-  [idx stride coll]
-  (remove nil? (map #(get coll % 9) [(- idx 1) (+ idx 1) (- idx stride) (+ idx stride)])))
-
-(defn manhattan-neighbors-idx
-  [idx stride]
-  [(- idx 1) (+ idx 1) (- idx stride) (+ idx stride)])
+  [[x y] coll]
+  (map #(get-in coll % 9) [[(- x 1) y] [(+ x 1) y] 
+                           [x (- y 1)] [x (+ y 1)]]))
 
 (defn lowest?
   [neighbors number]
   (every? #(< number %) neighbors))
 
-(defn spread
-  [[idx & indices] heightmap basin stride]
-  (if (nil? idx)
-    basin
-    (let [neighbors (manhattan-neighbors idx stride heightmap)])))
-    
 (defn part-1
   "Day 09 Part 1"
   [input]
-  (let [heightmap (mapv #(clojure.edn/read-string %) (clojure.string/split input #""))
-        stride (inc (first (keep-indexed #(when (not (number? %2)) %1) heightmap)))]
+  (let [heightmap (into [] (for [line (clojure.string/split-lines input)] 
+                             (into [] (for [d (re-seq #"\d" line)]
+                                        (clojure.edn/read-string d)))))]
     (reduce (fn [sum idx]
-              (let [n (get heightmap idx)]
-                (if (and (some? n)
-                         (lowest? (manhattan-neighbors idx stride heightmap) n))
+              (let [n (get-in heightmap idx)]
+                (if (lowest? (manhattan-neighbors idx heightmap) n)
                   (+ sum (inc n))
                   sum)))
             0
-            (range (count heightmap)))))
+            (for [x (range (count heightmap))
+                  y (range (count (first heightmap)))] 
+              [x y]))))
 
 (defn part-2
   "Day 09 Part 2"
