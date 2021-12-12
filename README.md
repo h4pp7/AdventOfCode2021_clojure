@@ -271,3 +271,26 @@ This should work like this:
 - at the end, get the matching bracket for the top of the stack, pop it, repeat until it's empty
 
 To combine the work for part 1 and part 2, the main loop returns a map with the key `:illegal` and the illegal bracket. If it went through the whole line without finding an illegal character, it returns a map with the key `{:stack}` and the stack.
+
+### Day 11
+#### Part 1
+I can do this similarily to day 9 with nested vectors.
+Increase the energy levels of the octopodes with
+
+```clojure
+(update-in [[0 1 2] [2 4 6]] [1 2] inc)
+```
+
+Unlike other Game of Life like challenges last year, we **do** have chain reactions here.
+The challenge is that an octopus only flashes once per step.
+How do we mark, that an octopus already flashed?
+
+Maybe the cells should be in a map, mapping from coordinates to their values.
+As a nested vector, I find myself generating the coordinates for all of them over and over.
+
+I tried to come up with a `map-kv` function, based on `reduce-kv` that would work with two-dimensional coordinates, but didn't manage to do so.
+
+The recursive step function works like this:
+
+1. increase the energy of all cells = 10 plus their neighbors
+2. 

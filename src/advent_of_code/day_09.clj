@@ -9,7 +9,7 @@
 (defn lowest?
   [neighbors number]
   (every? #(< number %) neighbors))
-
+    
 (defn part-1
   "Day 09 Part 1"
   [input]
