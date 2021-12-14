@@ -290,7 +290,26 @@ As a nested vector, I find myself generating the coordinates for all of them ove
 
 I tried to come up with a `map-kv` function, based on `reduce-kv` that would work with two-dimensional coordinates, but didn't manage to do so.
 
-The recursive step function works like this:
+### Day 13
+#### Part 1
+We get a list with coordinates for dots on transparent paper and instructions for folding the paper along certain rows/columns.
+Dots that overlap after a fold count as one dot.
+How many dots are there after all the foldings?
 
-1. increase the energy of all cells = 10 plus their neighbors
-2. 
+Is it a bad idea to just apply the linear transformation to every vectory?
+Can I shortcut that somehow?
+
+For every fold instruction generate the transformation matrix, then multiply each vector (dot) with that matrix.
+
+Quick and dirty vector matrix multiplication:
+
+```clojure
+(defn dot-product [a b]
+  (reduce + (map * a b))) 
+
+(defn vec-mat-mult [v m]
+  (mapv #(dot-product v %) m))
+```
+
+--- 
+I did it completely differently in the end: TODO:
