@@ -342,3 +342,19 @@ I suspected that it would be impossible to generate all the strings.
 Obviously my part 1 solution doesn't work for part 2 here.
 I could try to improve the brute force method, maybe with memoization and also smarter choice of the data models.
 But there has to be a smarter solution.
+
+Better idea (maybe):
+Start with a map like this:
+```clojure
+{"nn" 1 "nc" 1 "cb" 1}
+```
+
+At every step, 
+- set every value to 0
+- look up the keys in the rule-map and add the respective pairs with the value of the old keys.
+
+So for example, the key "NN" is 1, so it adds/updates the keys "NC" and "CN" with 1
+
+```clojure
+{"nc" 1 "cn" 1 "nb" 1 "bc" 1 "cb" 0 "ch" 1 "hb" 1}
+```
