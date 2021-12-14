@@ -1,5 +1,5 @@
 (ns advent-of-code.day-13
-  "AOC 2021 Day 12"
+  "AOC 2021 Day 13"
   (:require [advent-of-code.util :refer [split-p]]
             [clojure.string :refer [split split-lines includes? join]]))
 

@@ -313,3 +313,32 @@ Quick and dirty vector matrix multiplication:
 
 --- 
 I did it completely differently in the end: TODO:
+
+### Day 14
+#### Part 1
+We get a string like `NNCB` and insertion rules like `CH -> B`.
+This rules says: insert `B` wherever `C` and `H` are next to each other.
+
+They don't need to be in that order, do they? That rule would trigger on `CH` and on `HC`, presumably?
+
+Ah no, they don't! The example has different rules for `NC -> B` and `CN -> C`.
+
+What if I put the rules in a map, mapping from sequences to sequences like this:
+
+```clojure
+{'(\N \C) '(\N \B \C)}
+```
+
+The overlapping part is tricky. Because I can't just partition the string into pairs, then look up the rule in a map like this.
+For the example the following would happen:
+
+The pairs `((\N \N) (\N \C) (\C \B))` would turn into `((\N \C \N) (\N \B \C) (\C \H \B))`, which doubles the outer members.
+And if the rule lookup doesn't return the rightmost member of the pair/triple?
+We would get `((\N \C) (\N \B) (\C \H))` and that's almost right, except that the last character is missing.
+Actually because these are sequences handed around, I'm going to do it the other way around and `conj` the first character to the front of the sequence.
+
+#### Part 2
+I suspected that it would be impossible to generate all the strings.
+Obviously my part 1 solution doesn't work for part 2 here.
+I could try to improve the brute force method, maybe with memoization and also smarter choice of the data models.
+But there has to be a smarter solution.
