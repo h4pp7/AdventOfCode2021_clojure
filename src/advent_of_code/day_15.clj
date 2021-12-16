@@ -1,6 +1,7 @@
 (ns advent-of-code.day-15
   (:require [clojure.string :refer [split-lines]]
-            [advent-of-code.util :refer [abs]]))
+            [advent-of-code.util :refer [abs]]
+            [clojure.data.priority-map :refer [priority-map-keyfn]]))
   
 (defn parse-input
   [input]
@@ -24,39 +25,30 @@
 (defn expand-node
   [current open-list closed-list goal cavern]
   (if-let [neighbors (remove #(contains? closed-list %)
-                             (manhattan-neighbors current cavern))]  
-    (let [current-g-score (get-in open-list [current :g-score])
-          new-open-list (reduce (fn [ol n]
-                                  (let [tentative-g (+ current-g-score 
-                                                       (get-in cavern n))]
-                                    (-> ol
-                                        (update-in [n :g-score] #(if-some [old %] 
-                                                                   (min old tentative-g) 
-                                                                   tentative-g))
-                                        (assoc-in [n :f-score] (+ tentative-g (h n goal))))))
-                                open-list
-                                neighbors)]
-      (dissoc new-open-list current))
-    (dissoc open-list current)))
+                             (manhattan-neighbors (first current) cavern))]  
+    (reduce (fn [ol n]
+              (let [tentative-g (+ (:g-score (last current))
+                                   (get-in cavern n))]
+                (-> ol
+                    (update-in [n :g-score] #(if-some [old %] (min old tentative-g) tentative-g))
+                    (assoc-in [n :f-score] (+ tentative-g (h n goal))))))
+            open-list
+            neighbors)
+    open-list))
   
 (defn a*
   [start goal cavern]
-
-  (loop [open-list   {start {:g-score 0 :f-score 0}}
+  (loop [open-list   (priority-map-keyfn :g-score start {:g-score 0 :f-score 0})
          closed-list #{}]
-    (let [current (->> open-list 
-                       (sort-by (comp :g-score second))
-                       (remove (fn [[k _]] (contains? closed-list k))) 
-                       first
-                       key)] 
-      (if (= goal current)
-        (get-in open-list [current :g-score])
+    (let [current (first (remove (fn [[k v]] (contains? closed-list k)) open-list))] 
+      (if (= goal (first current))
+        (:g-score (second current))
         (recur (expand-node current 
-                            open-list
+                            (pop open-list)
                             closed-list
                             goal
                             cavern)
-               (conj closed-list current))))))
+               (conj closed-list (first current)))))))
 
 (defn part-1
   "Day 15 Part 1"

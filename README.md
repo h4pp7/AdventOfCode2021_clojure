@@ -395,3 +395,7 @@ Closed list will be a hash-set, checking if a node is on it is then just
 ```
 
 Yeah, that reduces it to a bit over 1 second.
+
+---
+
+When I use a [priority-map](https://github.com/clojure/data.priority-map) for the open list the time goes down to 200ms.
