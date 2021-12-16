@@ -358,3 +358,40 @@ So for example, the key "NN" is 1, so it adds/updates the keys "NC" and "CN" wit
 ```clojure
 {"nc" 1 "cn" 1 "nb" 1 "bc" 1 "cb" 0 "ch" 1 "hb" 1}
 ```
+
+### Day 15
+
+If I represent the open list like this:
+```clojure
+{{start {:g-score 0 :f-score 0}}}]
+```
+
+I can get the member with the lowest f-score like this
+```clojure
+(key (first (sort-by (comp :g-score second) open-list))) 
+```
+---
+
+Implemented A* for part 1, but it's extremely slow. Takes almost a minute to find the solution.
+Let's figure out, if I can make it more efficient.
+I bet that the biggest slowdown comes from the way I select the current node.
+From the [Wikipedia article on A*](https://en.wikipedia.org/wiki/A*_search_algorithm) I know that the open list usually is implemented as a priority queue.
+
+Also, I packed all the nodes in one big nested map like this, with a nested flag `:visited`.
+
+At least I should seperate the open-list and the closed-list.
+Which information do I need to record for the nodes in the two lists?
+
+- open list: index, g-score, f-score
+- closed list: index
+
+Is it really just the index?
+Let's just make this one change and leave the open list as is for now.
+
+Closed list will be a hash-set, checking if a node is on it is then just 
+
+```clojure
+(contains? closed-list node)
+```
+
+Yeah, that reduces it to a bit over 1 second.
