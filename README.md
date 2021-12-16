@@ -399,3 +399,9 @@ Yeah, that reduces it to a bit over 1 second.
 ---
 
 When I use a [priority-map](https://github.com/clojure/data.priority-map) for the open list the time goes down to 200ms.
+
+For part 2 I adjusted the cost function (that we use to get the weight of the nodes) two add 1 for each of the five steps in any direction.
+We `mod` the index by the width of the index, to land on the corresponding value in the input.
+We decrement the result, mod it with 9 and increment it again to get the roll-over from 9 to 1.
+
+Part 2 runs in 4 seconds :)

@@ -11,24 +11,19 @@
     (mapv (fn [l] (mapv #(clojure.edn/read-string %) (re-seq #"\d" l))) lines)))
 
 (defn manhattan-neighbors
-  [[x y] cavern]
-  (for [[nx ny] [[(- x 1) y] [(+ x 1) y] [x (- y 1)] [x (+ y 1)]] 
-        :when (and (<= 0 nx (dec (count (last cavern))))
-                   (<= 0 ny (dec (count cavern))))]
+  [[y x] height width]
+  (for [[ny nx] [[(- x 1) y] [(+ x 1) y] [x (- y 1)] [x (+ y 1)]] 
+        :when (and (<= 0 nx width)
+                   (<= 0 ny height))]
     [nx ny]))
-
-(defn h
-  "estimates the cheapest cost to goal by calculating the manhattan distance"
-  [[x y] [a b]]
-  (+ (abs (- x a)) (abs (- y b)))) 
   
 (defn expand-node
-  [current open-list closed-list goal cavern]
+  [current open-list closed-list goal height width cost-fn h]
   (if-let [neighbors (remove #(contains? closed-list %)
-                             (manhattan-neighbors (first current) cavern))]  
+                             (manhattan-neighbors (first current) height width))]  
     (reduce (fn [ol n]
               (let [tentative-g (+ (:g-score (last current))
-                                   (get-in cavern n))]
+                                   (cost-fn n))]
                 (-> ol
                     (update-in [n :g-score] #(if-some [old %] (min old tentative-g) tentative-g))
                     (assoc-in [n :f-score] (+ tentative-g (h n goal))))))
@@ -37,7 +32,7 @@
     open-list))
   
 (defn a*
-  [start goal cavern]
+  [start goal height width cost-fn h]
   (loop [open-list   (priority-map-keyfn :g-score start {:g-score 0 :f-score 0})
          closed-list #{}]
     (let [current (first (remove (fn [[k v]] (contains? closed-list k)) open-list))] 
@@ -47,18 +42,47 @@
                             (pop open-list)
                             closed-list
                             goal
-                            cavern)
+                            height
+                            width
+                            cost-fn
+                            h)
                (conj closed-list (first current)))))))
 
 (defn part-1
   "Day 15 Part 1"
   [input]
   (let [cavern (parse-input input)
-        goal [(dec (count (last cavern))) (dec (count cavern))]
-        start [0 0]]
-    (a* start goal cavern)))
+        start [0 0]
+        cost-fn (fn [n] (get-in cavern n))
+        h (fn [[x y] [a b]]
+            (+ (abs (- x a)) (abs (- y b)))) 
+        height (dec (count cavern)) 
+        width (dec (count (first cavern)))
+        goal [height width]]
+    (a* start goal height width cost-fn h)))
 
 (defn part-2
   "Day 15 Part 2"
   [input]
-  input)
+  (let [cavern (parse-input input)
+        start [0 0]
+        input-height (count cavern) 
+        input-width (count (first cavern))
+        height (dec (* 5 input-width))
+        width (dec (* 5 input-width))
+        goal [height width] 
+        cost-fn (fn [[y x]]
+                  (-> cavern
+                      (get-in [(mod y input-height) (mod x input-width)])
+                      (+ (quot x input-width)) 
+                      (+ (quot y input-height))
+                      dec
+                      (mod 9)
+                      inc))
+        h (fn [[x y] [a b]]
+            (+ (+ (abs (- x a)) 
+                  (quot x 10))
+               (+ (abs (- y b)) 
+                  (quot y 10))))]
+    
+    (a* start goal height width cost-fn h)))

@@ -10,5 +10,5 @@
 
 (deftest part2
   (testing "Part 2 with example input"
-    (let [expected nil]
+    (let [expected 315]
       (is (= expected (part-2 (read-input "day-15-example.txt")))))))
