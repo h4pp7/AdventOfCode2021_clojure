@@ -211,6 +211,7 @@ Now we just need function that finds all the von Neumann neighbours. I'll genera
 Wait a minute: I don't need to pad! Since I'll use a vector, I can just use `get` with a default value of 9. D'oh.
 
 #### Part 2
+TODO: part 2
 To find the basins, start at a lowest point and spread in every direction until you hit a 9 (or the edge).
 
 First thing I can think of is doing it recursively:
@@ -218,11 +219,7 @@ First thing I can think of is doing it recursively:
 - Get the indices of its neighbors, that are not 9
 - Then repeat that for every of those, but also ignore indices already visited.
 
----
-
 Or implement one of the [flood fill algorithms](https://en.m.wikipedia.org/wiki/Flood_fill) from wikipedia.
-
----
 
 The alternative to the heightmap as one vector is to have a vector of the rows and access the coordinates with `get-in`.
 
@@ -273,6 +270,7 @@ This should work like this:
 To combine the work for part 1 and part 2, the main loop returns a map with the key `:illegal` and the illegal bracket. If it went through the whole line without finding an illegal character, it returns a map with the key `{:stack}` and the stack.
 
 ### Day 11
+TODO: part 1 and 2
 #### Part 1
 I can do this similarily to day 9 with nested vectors.
 Increase the energy levels of the octopodes with
@@ -289,6 +287,9 @@ Maybe the cells should be in a map, mapping from coordinates to their values.
 As a nested vector, I find myself generating the coordinates for all of them over and over.
 
 I tried to come up with a `map-kv` function, based on `reduce-kv` that would work with two-dimensional coordinates, but didn't manage to do so.
+
+### Day 12
+TODO: document part 1 solution, solve part 2
 
 ### Day 13
 #### Part 1
@@ -312,7 +313,8 @@ Quick and dirty vector matrix multiplication:
 ```
 
 --- 
-I did it completely differently in the end: TODO:
+I did it completely differently in the end. 
+TODO: document solution
 
 ### Day 14
 #### Part 1
@@ -338,6 +340,7 @@ We would get `((\N \C) (\N \B) (\C \H))` and that's almost right, except that th
 Actually because these are sequences handed around, I'm going to do it the other way around and `conj` the first character to the front of the sequence.
 
 #### Part 2
+TODO: solve part 2
 I suspected that it would be impossible to generate all the strings.
 Obviously my part 1 solution doesn't work for part 2 here.
 I could try to improve the brute force method, maybe with memoization and also smarter choice of the data models.
@@ -360,7 +363,6 @@ So for example, the key "NN" is 1, so it adds/updates the keys "NC" and "CN" wit
 ```
 
 ### Day 15
-
 If I represent the open list like this:
 ```clojure
 {{start {:g-score 0 :f-score 0}}}]
@@ -407,6 +409,7 @@ We decrement the result, mod it with 9 and increment it again to get the roll-ov
 Part 2 runs in 4 seconds :)
 
 ### Day 16
+TODO: solve part 2
 We get a bit stream represented in hexademimal.
 It contains packets of variable length and type. 
 
