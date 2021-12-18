@@ -405,3 +405,17 @@ We `mod` the index by the width of the index, to land on the corresponding value
 We decrement the result, mod it with 9 and increment it again to get the roll-over from 9 to 1.
 
 Part 2 runs in 4 seconds :)
+
+### Day 16
+We get a bit stream represented in hexademimal.
+It contains packets of variable length and type. 
+
+Is this a job for a finite state machine? What would be the transitions?
+
+Solved part 1 with a FSM (not sure it actually qualifies as such) with mutual
+recursive functions. Took me a bit long to realize that the stop condition is
+when the rest of the bit-stream is less than the minimal length of a packet.
+
+I'm not sure I can keep this basic structure for part 2.
+How do I sum/multiply/get the min/max etc with this approach?
+Since packages can be nested, I think 
