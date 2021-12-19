@@ -422,3 +422,28 @@ when the rest of the bit-stream is less than the minimal length of a packet.
 I'm not sure I can keep this basic structure for part 2.
 How do I sum/multiply/get the min/max etc with this approach?
 Since packages can be nested, I think 
+
+### Day 18: Snailfish
+**Sum** **snailfish numbers** and get the **magnitude** of that sum.
+
+- Snailfish numbers: nested pairs like `[[[[1,2],[3,4]],[[5,6],[7,8]]],9]`
+- Addition: just conjoin the terms, but the result must be **reduced**
+- Reduction: repeatedly **explode** the leftmost pair, that is nested inside of four pairs and **split** every regular number <= 10
+- Exploding: add left value to first regular number to the left, right value to the first regular number to the right, then replace entire pair with 0.
+- Splitting: replace regular number n with a pair, where left value is n divided by two and rounded down, and right value is n divided by two rounded up.
+- Magnitude: recursively (from in to out) add (left value * 3) + (right value * 2).
+
+Let's see if I can make myself understand this number system.
+Exploding and splitting describe a change in the order of magnitude (for a number system, i.e. the factor that is needed to increase the number of digits).
+
+Exploding reduces the number of levels, while splitting increases the number of levels.
+How is this related to what is called **Magnitutde** in the puzzle?
+And is it related, that splitting rounds down the left number and rounds up the right number, while to get the magnitude we multiply the left number by 3, the right number by one?
+
+Anyways, let's stop looking for the smart way and solve it by just implementing the puzzle description.
+
+I'm using this opportunity to learn about `clojure.zip`.
+Taking [this tutorial](https://grishaev.me/en/clojure-zippers/) as a basis. 
+I'm using some of their helper functions, like `iter-zip`.
+
+Since I want to edit, the general way to traverse the zipper and make changes is too loop with `zip/next`.
