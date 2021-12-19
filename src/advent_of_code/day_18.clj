@@ -13,7 +13,7 @@
     (and (number? node) (>= (node 10)))))
 
 (defn exploder? [loc]
-  (and (coll? (zip/node loc)) (= 4 (count (zip/path loc))))
+  (and (coll? (zip/node loc)) (= 4 (count (zip/path loc)))))
 
 (defn part-1
   "Day 18 Part 1"

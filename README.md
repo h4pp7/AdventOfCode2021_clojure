@@ -424,6 +424,7 @@ How do I sum/multiply/get the min/max etc with this approach?
 Since packages can be nested, I think 
 
 ### Day 18: Snailfish
+TODO: solve part 1 and 2
 **Sum** **snailfish numbers** and get the **magnitude** of that sum.
 
 - Snailfish numbers: nested pairs like `[[[[1,2],[3,4]],[[5,6],[7,8]]],9]`
@@ -444,6 +445,18 @@ Anyways, let's stop looking for the smart way and solve it by just implementing 
 
 I'm using this opportunity to learn about `clojure.zip`.
 Taking [this tutorial](https://grishaev.me/en/clojure-zippers/) as a basis. 
-I'm using some of their helper functions, like `iter-zip`.
 
 Since I want to edit, the general way to traverse the zipper and make changes is too loop with `zip/next`.
+
+### Day 19: Beacon Scanner
+TODO: solve part 1 and 2
+
+We get the relative positions of beacons for some scanners, that we don't know
+the position of.
+We need to find pairs of scanners with 12 common beacons to figure out the position of all the scanners.
+Also, the scanners are all oriented differently.
+
+Part 1: how many beacons are there in total?
+
+How do I find overlapping beacons? Can I translate a scanner report into
+relative positions of the beacons to each other.
