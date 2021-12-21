@@ -460,3 +460,24 @@ Part 1: how many beacons are there in total?
 
 How do I find overlapping beacons? Can I translate a scanner report into
 relative positions of the beacons to each other.
+
+### Day 20: Trench Map
+#### Part 1
+My input's image enhancement algorithm has a light pixel `#` at index 0.
+That means that every pixel outside the input image into infinity turns light on with the first pass of enhancing. 
+
+This means, on the first pass, I grow the image by two in every direction with the pixels at the edges turned on.
+I'll do that by just getting a default value of `#` when probing for the neighbors.
+
+```
+...............
+.....#..#......
+.....#.........
+.....##..#.....
+.......#.......
+.......###.....
+...............
+```
+
+#### Part 2
+TODO: solve part 2
