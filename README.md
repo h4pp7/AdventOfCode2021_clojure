@@ -481,3 +481,6 @@ I'll do that by just getting a default value of `#` when probing for the neighbo
 
 #### Part 2
 TODO: solve part 2
+
+### Day 21 --- Dirac Dice
+TODO: solve part 2

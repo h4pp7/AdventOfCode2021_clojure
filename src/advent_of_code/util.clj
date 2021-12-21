@@ -13,8 +13,10 @@
       clojure.string/trim
       (#(clojure.string/split % #"\n\n"))))
 
-(defn abs
-  [n]
+(defn abs [n]
   (if (neg? n)
     (- n)
     n))
+
+(defn mod-1 [n d]
+  (-> n dec (mod d) inc))
