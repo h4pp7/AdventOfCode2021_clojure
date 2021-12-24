@@ -484,3 +484,20 @@ TODO: solve part 2
 
 ### Day 21 --- Dirac Dice
 TODO: solve part 2
+
+### Day 22
+Turn on/off a set of cubes in a 3D space according to instructions like these:
+
+```
+on x=10..12,y=10..12,z=10..12
+on x=11..13,y=11..13,z=11..13
+off x=9..11,y=9..11,z=9..11
+on x=10..10,y=10..10,z=10..10
+```
+
+For Part 1, consider only cubes between -50 and 50 in each axis.
+
+Keeping track on every cube is the wrong approach for sure. Part 2 will be for all the points and that number is extremely big.
+
+So we keep track of the corner coordinates for fully turned on cuboids?
+Then we would need to split a cuboid up into multiple ones when overlapping cubes get turned off (with different szenarios for how the cuboids overlap).

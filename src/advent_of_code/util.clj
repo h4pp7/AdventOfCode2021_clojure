@@ -20,3 +20,10 @@
 
 (defn mod-1 [n d]
   (-> n dec (mod d) inc))
+
+(defn cartesian-product [colls]
+  (if (empty? colls)
+    '(())
+    (for [more (cart (rest colls))
+          x (first colls)]
+      (cons x more))))
